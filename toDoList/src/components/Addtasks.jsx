@@ -3,6 +3,7 @@ import ToDoForm from "./ToDoForm.jsx";
 
 const AddTasks = () => {
   const [toDoList, setToDoList] = useState([]);
+  
 
   const GetApiToDo = async () => {
     await fetch("https://assets.breatheco.de/apis/fake/todos/user/lbdelilla", {
@@ -26,7 +27,7 @@ const AddTasks = () => {
   const PutApiToDo = async () => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    console.log(toDoList);
+   
     await fetch("https://assets.breatheco.de/apis/fake/todos/user/lbdelilla", {
       method: "PUT",
       body: JSON.stringify(toDoList),
@@ -42,20 +43,31 @@ const AddTasks = () => {
         console.error(error);
       });
   };
-  console.log(toDoList);
+ 
 
   useEffect(() => {
     toDoList.length ? PutApiToDo() : null;
   }, [toDoList]);
 
   function AddNewTask(inputValue) {
-    setToDoList([...toDoList, { label: inputValue, done: false, id: toDoList.length }]);
+    setToDoList([
+      ...toDoList,
+      { label: inputValue, done: false, id: toDoList.length},
+    ]);
   }
 
-  function DeleteTask(index) {
-    setToDoList( toDoList.filter((item) => {item.id !== index}))
+  function deleteTask() {
+    var requestOptions = {
+      method: 'DELETE',
+      redirect: 'follow'
+    };
+    fetch("https://assets.breatheco.de/apis/fake/todos/user/lbdelilla", requestOptions)
+      .then(response => response.json())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+    
   }
-
+ 
   return (
     <div className="taskManager text-center">
       <div className="otrodiv">
@@ -64,7 +76,11 @@ const AddTasks = () => {
           <ul>
             {toDoList.map((item) => (
               <li className="sen" key={item.id}>
-                {item.label} <i onClick={()=>DeleteTask(item.id)} className="fa-solid fa-xmark"></i>{" "}
+                {item.label}{" "}
+                <i
+                  onClick={(e) => deleteTask(item.id)}
+                  className="fa-solid fa-xmark"
+                ></i>{" "}
               </li>
             ))}
           </ul>
