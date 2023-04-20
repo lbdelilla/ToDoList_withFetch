@@ -9,7 +9,7 @@ import Footer from './components/Footer.jsx';
 const Home = () => {
 	return (
 		<div className="toDoList">	
-      <Title/>
+      		<Title/>
 			<AddTasks/>
 			<Footer/>
 		</div>
